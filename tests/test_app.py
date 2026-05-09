@@ -41,11 +41,11 @@ class StockScoutAppTests(unittest.TestCase):
     def test_filters_high_risk_stocks(self) -> None:
         app = StockScoutApp(REPO_ROOT)
         output_path = app.run(now=datetime.now(timezone.utc), output_dir=REPO_ROOT / "tmp")
+        self.addCleanup(lambda: output_path.unlink(missing_ok=True))
         with output_path.open(encoding="utf-8", newline="") as handle:
             rows = list(csv.DictReader(handle))
         symbols = {row["股票代码"] for row in rows}
         self.assertNotIn("TSLA", symbols)
-        output_path.unlink()
 
     def test_cli_uses_repository_root_by_default(self) -> None:
         result = subprocess.run(
@@ -57,8 +57,8 @@ class StockScoutAppTests(unittest.TestCase):
             text=True,
         )
         output_path = Path(result.stdout.strip())
+        self.addCleanup(lambda: output_path.unlink(missing_ok=True))
         self.assertTrue(output_path.exists())
-        output_path.unlink()
 
 
 if __name__ == "__main__":
