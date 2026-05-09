@@ -5,7 +5,7 @@
 ## 用法
 
 ```bash
-python /home/runner/work/StockScout/StockScout/stock_scout.py --symbol AAPL --price 150
+python stock_scout.py --symbol AAPL --price 150
 ```
 
 示例输出：

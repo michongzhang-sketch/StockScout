@@ -8,11 +8,11 @@ from decimal import Decimal, ROUND_HALF_UP
 
 BUY_DISCOUNT = Decimal("0.97")
 SELL_PREMIUM = Decimal("1.10")
-TWOPLACES = Decimal("0.01")
+TWO_PLACES = Decimal("0.01")
 
 
 def _to_money(value: Decimal) -> Decimal:
-    return value.quantize(TWOPLACES, rounding=ROUND_HALF_UP)
+    return value.quantize(TWO_PLACES, rounding=ROUND_HALF_UP)
 
 
 @dataclass(frozen=True)
