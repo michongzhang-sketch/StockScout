@@ -13,6 +13,10 @@ BASE_UPSIDE_TARGET = 0.08
 DIVIDEND_UPSIDE_DIVISOR = 100.0
 MIN_UPSIDE_TARGET = 0.06
 MAX_UPSIDE_TARGET = 0.22
+RISK_FLAG_PENALTIES = {
+    "volatility_too_high": 0.04,
+    "debt_too_high": 0.02,
+}
 
 
 class DecisionEngine:
@@ -30,7 +34,7 @@ class DecisionEngine:
             + technical_score * weights.get("technical", 0.5),
             2,
         )
-        risk_penalty = 0.0 if not risk_flags else RISK_FLAG_MARGIN_PENALTY * len(risk_flags)
+        risk_penalty = sum(RISK_FLAG_PENALTIES.get(flag, RISK_FLAG_MARGIN_PENALTY) for flag in risk_flags)
         margin_of_safety = clamp(
             BASE_MARGIN_OF_SAFETY + max(0.0, SCORE_TARGET - total_score) / SCORE_DISTANCE_DIVISOR + risk_penalty,
             MIN_MARGIN_OF_SAFETY,

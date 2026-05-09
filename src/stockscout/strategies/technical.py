@@ -12,6 +12,8 @@ TREND_DISTANCE_WEIGHT = 1.2
 
 class TechnicalStrategy:
     def score(self, stock: StockSnapshot) -> float:
+        if stock.current_price <= 0:
+            return 0.0
         trend_bonus = TREND_BONUS if stock.current_price >= stock.ma_50 >= stock.ma_200 else 0.0
         relative_strength = stock.momentum_90d * RELATIVE_STRENGTH_WEIGHT
         volatility_penalty = stock.volatility_90d * VOLATILITY_PENALTY_WEIGHT

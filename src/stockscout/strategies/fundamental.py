@@ -16,7 +16,7 @@ GROWTH_BLEND = 0.3
 
 class FundamentalStrategy:
     def score(self, stock: StockSnapshot) -> float:
-        value_score = 100 - (stock.pe_ratio * PE_WEIGHT + stock.pb_ratio * PB_WEIGHT)
+        value_score = clamp(100 - (stock.pe_ratio * PE_WEIGHT + stock.pb_ratio * PB_WEIGHT), 0.0, 100.0)
         quality_score = stock.roe * ROE_WEIGHT + stock.dividend_yield * DIVIDEND_WEIGHT
         growth_score = stock.revenue_growth * GROWTH_WEIGHT
         leverage_penalty = stock.debt_to_equity * LEVERAGE_WEIGHT
