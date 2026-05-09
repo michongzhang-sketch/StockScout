@@ -19,6 +19,13 @@ class AnalyzeStockSelectionTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             analyze_stock_selection("AAPL", Decimal("0"))
 
+        with self.assertRaises(ValueError):
+            analyze_stock_selection("AAPL", Decimal("-1"))
+
+    def test_rejects_blank_symbol(self) -> None:
+        with self.assertRaises(ValueError):
+            analyze_stock_selection("   ", Decimal("100"))
+
 
 if __name__ == "__main__":
     unittest.main()
