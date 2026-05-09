@@ -39,4 +39,13 @@ PYTHONPATH=src python -m stockscout
 
 ```bash
 PYTHONPATH=src python -m unittest discover -s tests
+
+示例输出：
+
+```text
+股票代码: AAPL
+当前日期: 2026-05-09
+当前价格: 150.00
+建议买入价格: 145.50
+建议卖出价格: 165.00
 ```
