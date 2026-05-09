@@ -1,0 +1,10 @@
+{
+  "max_recommendations": 5,
+  "min_market_cap": 10000000000,
+  "max_volatility_90d": 0.3,
+  "max_debt_to_equity": 1.2,
+  "strategy_weights": {
+    "fundamental": 0.6,
+    "technical": 0.4
+  }
+}

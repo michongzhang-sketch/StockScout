@@ -1,0 +1,1 @@
+"""Screeners for stock candidates."""
