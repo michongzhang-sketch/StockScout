@@ -7,15 +7,15 @@ StockScout 是一个本地可运行的股票投资决策辅助工程。
 - 清晰的工程目录骨架
 - 可配置的股票样本数据与策略参数
 - 数据采集、筛选、基本面分析、技术面分析、风险控制、综合决策等 agent
-- 输出到 `/home/runner/work/StockScout/StockScout/tmp` 的时间戳 CSV 报告
+- 输出到仓库 `tmp/` 目录的时间戳 CSV 报告
 
 ## 目录
 
-- `/home/runner/work/StockScout/StockScout/config`
-- `/home/runner/work/StockScout/StockScout/src/stockscout`
-- `/home/runner/work/StockScout/StockScout/tests`
-- `/home/runner/work/StockScout/StockScout/tmp`
-- `/home/runner/work/StockScout/StockScout/docs`
+- `config/`
+- `src/stockscout/`
+- `tests/`
+- `tmp/`
+- `docs/`
 
 ## 运行方式
 
