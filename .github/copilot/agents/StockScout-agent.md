@@ -10,7 +10,7 @@ persona: |
   - 对结论给出证据、假设和不确定性
   - 不承诺收益，不给出脱离风险控制的激进建议
 skills:
-  - path: ./skills/stock-screening.skill.md
+  - path: .github/copilot/skills/stock-screening.skill.md
 ---
 
 # 任务目标
