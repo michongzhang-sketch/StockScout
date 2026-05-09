@@ -1,10 +1,18 @@
 from __future__ import annotations
 
 from stockscout.models import StockAnalysis, StockSnapshot, StrategyConfig
+from stockscout.utils.math import clamp
 
-
-def _clamp(value: float, lower: float, upper: float) -> float:
-    return max(lower, min(upper, value))
+BASE_MARGIN_OF_SAFETY = 0.03
+SCORE_TARGET = 80.0
+SCORE_DISTANCE_DIVISOR = 500.0
+RISK_FLAG_MARGIN_PENALTY = 0.03
+MIN_MARGIN_OF_SAFETY = 0.02
+MAX_MARGIN_OF_SAFETY = 0.15
+BASE_UPSIDE_TARGET = 0.08
+DIVIDEND_UPSIDE_DIVISOR = 100.0
+MIN_UPSIDE_TARGET = 0.06
+MAX_UPSIDE_TARGET = 0.22
 
 
 class DecisionEngine:
@@ -22,9 +30,17 @@ class DecisionEngine:
             + technical_score * weights.get("technical", 0.5),
             2,
         )
-        risk_penalty = 0.0 if not risk_flags else 0.03 * len(risk_flags)
-        margin_of_safety = _clamp(0.03 + max(0.0, 80 - total_score) / 500 + risk_penalty, 0.02, 0.15)
-        upside_target = _clamp(0.08 + total_score / 500 + stock.dividend_yield / 100, 0.06, 0.22)
+        risk_penalty = 0.0 if not risk_flags else RISK_FLAG_MARGIN_PENALTY * len(risk_flags)
+        margin_of_safety = clamp(
+            BASE_MARGIN_OF_SAFETY + max(0.0, SCORE_TARGET - total_score) / SCORE_DISTANCE_DIVISOR + risk_penalty,
+            MIN_MARGIN_OF_SAFETY,
+            MAX_MARGIN_OF_SAFETY,
+        )
+        upside_target = clamp(
+            BASE_UPSIDE_TARGET + total_score / SCORE_DISTANCE_DIVISOR + stock.dividend_yield / DIVIDEND_UPSIDE_DIVISOR,
+            MIN_UPSIDE_TARGET,
+            MAX_UPSIDE_TARGET,
+        )
         buy_price = round(stock.current_price * (1 - margin_of_safety), 2)
         sell_price = round(stock.current_price * (1 + upside_target), 2)
         return StockAnalysis(

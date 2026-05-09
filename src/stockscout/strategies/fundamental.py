@@ -1,16 +1,29 @@
 from __future__ import annotations
 
 from stockscout.models import StockSnapshot
+from stockscout.utils.math import clamp
 
-
-def _clamp(value: float, lower: float = 0.0, upper: float = 100.0) -> float:
-    return max(lower, min(upper, value))
+PE_WEIGHT = 1.25
+PB_WEIGHT = 2.5
+ROE_WEIGHT = 1.4
+DIVIDEND_WEIGHT = 6.0
+GROWTH_WEIGHT = 3.0
+LEVERAGE_WEIGHT = 12.0
+VALUE_BLEND = 0.35
+QUALITY_BLEND = 0.4
+GROWTH_BLEND = 0.3
 
 
 class FundamentalStrategy:
     def score(self, stock: StockSnapshot) -> float:
-        value_score = 100 - (stock.pe_ratio * 1.25 + stock.pb_ratio * 2.5)
-        quality_score = stock.roe * 1.4 + stock.dividend_yield * 6
-        growth_score = stock.revenue_growth * 3
-        leverage_penalty = stock.debt_to_equity * 12
-        return round(_clamp(value_score * 0.35 + quality_score * 0.4 + growth_score * 0.3 - leverage_penalty), 2)
+        value_score = 100 - (stock.pe_ratio * PE_WEIGHT + stock.pb_ratio * PB_WEIGHT)
+        quality_score = stock.roe * ROE_WEIGHT + stock.dividend_yield * DIVIDEND_WEIGHT
+        growth_score = stock.revenue_growth * GROWTH_WEIGHT
+        leverage_penalty = stock.debt_to_equity * LEVERAGE_WEIGHT
+        blended_score = (
+            value_score * VALUE_BLEND
+            + quality_score * QUALITY_BLEND
+            + growth_score * GROWTH_BLEND
+            - leverage_penalty
+        )
+        return round(clamp(blended_score, 0.0, 100.0), 2)
